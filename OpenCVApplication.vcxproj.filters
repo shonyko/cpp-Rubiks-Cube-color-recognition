@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="common.cpp" />
+    <ClCompile Include="OpenCVApplication.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="lab04.cpp" />
+    <ClCompile Include="menu.cpp" />
+    <ClCompile Include="utils.cpp" />
+    <ClCompile Include="lab05.cpp" />
+    <ClCompile Include="lab06.cpp" />
+    <ClCompile Include="lab07.cpp" />
+    <ClCompile Include="lab08.cpp" />
+    <ClCompile Include="lab09.cpp" />
+    <ClCompile Include="lab10.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="lab01.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="labs.h" />
+    <ClInclude Include="lab04.h" />
+    <ClInclude Include="utils.h" />
+    <ClInclude Include="lab05.h" />
+    <ClInclude Include="lab06.h" />
+    <ClInclude Include="lab07.h" />
+    <ClInclude Include="lab08.h" />
+    <ClInclude Include="lab09.h" />
+    <ClInclude Include="lab10.h" />
+  </ItemGroup>
+</Project>

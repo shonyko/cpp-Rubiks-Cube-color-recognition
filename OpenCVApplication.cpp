@@ -31,12 +31,19 @@ const Mat close_kernel = getStructuringElement(MORPH_RECT, { 5, 5 });
 
 vector<pair<Vec3b, pair<Vec3b, Vec3b>>> colors = {
 	{ { 255, 255, 255 }, { { 0, 0, 80 }, { 180, 40, 255 } } },	// WHITE
+	{ { 255, 255, 255 }, { { 160, 195, 80 }, { 209, 255, 255 } } },	// WHITE
+	{ { 255, 255, 255 }, { { 0, 0, 200 }, { 180, 50, 255 } } },	// WHITE
 	{ { 0, 255, 255 }, { { 17, 19, 39 }, {40, 255, 255} } },	// YELLOW
-	{ { 0, 140, 255 }, { { 10, 20, 0 }, {30, 70, 255} } },		// ORANGE
-	{ { 0, 0, 255 }, { { 0, 16, 35 }, {10, 255, 255} } },		// RED1
-	{ { 0, 0, 255 }, { { 129, 43, 35 }, {180, 255, 255} } },	// RED2
-	{ { 255, 0, 0 }, { { 90, 70, 20 }, {125, 255, 255} } },		// BLUE
-	{ { 0, 255, 0 }, { { 41, 15, 5 }, {95, 255, 255} } },		// GREEN
+	//{ { 0, 140, 255 }, { { 10, 20, 0 }, {30, 70, 255} } },		// ORANGE
+	{ { 0, 140, 255 }, { { 2, 27, 75 }, {12, 255, 255} } },		// ORANGE
+	{ { 0, 140, 255 }, { { 3, 90, 200 }, {8, 150, 255} } },		// ORANGE
+	{ { 255, 0, 0 }, { { 90, 70, 14 }, {125, 255, 255} } },		// BLUE
+	{ { 0, 255, 0 }, { { 41, 15, 1 }, {95, 255, 255} } },		// GREEN
+};
+
+vector<pair<Vec3b, pair<Vec3b, Vec3b>>> red = {
+	{ { 0, 0, 255 }, { { 0	, 43, 35 }, {5, 255, 255} } },		// RED1
+	{ { 0, 0, 255 }, { { 129, 76, 35 }, {180, 255, 255} } },	// RED2
 };
 
 void drawCubeFrame(Mat& img, const Vec3b& color = Vec3b(50, 205, 50), const int& thickness = 2, const bool& showScanArea = false) {
@@ -177,7 +184,7 @@ int main() {
 	cap.set(CAP_PROP_FRAME_WIDTH, WIDTH);
 	cap.set(CAP_PROP_FRAME_HEIGHT, HEIGHT);
 
-	auto resolution = Size((int)cap.get(CAP_PROP_FRAME_WIDTH), 
+	auto resolution = Size((int)cap.get(CAP_PROP_FRAME_WIDTH),
 		(int)cap.get(CAP_PROP_FRAME_HEIGHT));
 
 	//const char* WIN_WEBCAM = "Webcam";
@@ -219,7 +226,7 @@ int main() {
 
 	Mat_<Vec3b> frame, frame_clone, hsv;
 	Mat_<Vec3b> output(HEIGHT, WIDTH);
-	Mat_<uchar> aux_mask, mask(HEIGHT, WIDTH);
+	Mat_<uchar> aux_mask, aux_mask2, red_mask, mask(HEIGHT, WIDTH);
 	char c;
 	double squares[3][3];
 	while (true) {
@@ -232,8 +239,10 @@ int main() {
 		flip(frame, frame, 1);
 		//imshow(WIN_WEBCAM, frame);
 		frame_clone = frame.clone();
-		drawCubeFrame(frame_clone, { 50, 205, 50 }, 2, true);
+		drawCubeFrame(frame_clone, { 50, 205, 50 }, 2, false);
 		imshow(WIN_MARKED_WEBCAM, frame_clone);
+
+		cvtColor(frame, hsv, COLOR_BGR2HSV);
 
 		c = waitKey(10);
 		// ESC
@@ -255,9 +264,9 @@ int main() {
 
 					for (int k = up_left.y; k < down_right.y; k++) {
 						for (int l = up_left.x; l < down_right.x; l++) {
-							auto h = frame(k, l)[0];
-							auto s = frame(k, l)[1];
-							auto v = frame(k, l)[2];
+							auto h = hsv(k, l)[0];
+							auto s = hsv(k, l)[1];
+							auto v = hsv(k, l)[2];
 
 							hmin = min(hmin, h); hmax = max(hmax, h);
 							smin = min(smin, s); smax = max(smax, s);
@@ -276,13 +285,11 @@ int main() {
 			avgs /= cnt;
 			avgv /= cnt;
 
-			saveData("D:/Faculta/An3/sem2/PI/lab/OpenCVApplication-VS2019_OCV451_basic/data/orange", hmin, smin, vmin, hmax, smax, vmax, avgh, avgs, avgv);
+			saveData("C:/Users/alexk/Documents/Faculta/sem2/PI/proiect2/OpenCVApplication-VS2019_OCV451_basic/data/white", hmin, smin, vmin, hmax, smax, vmax, avgh, avgs, avgv);
 		}
 
-		cvtColor(frame, hsv, COLOR_BGR2HSV);
-
-		auto whiteL = Vec3b(getTrackbarPos("HMin", "scrollbars"), getTrackbarPos("SMin", "scrollbars"), getTrackbarPos("VMin", "scrollbars"));
-		auto whiteU = Vec3b(getTrackbarPos("HMax", "scrollbars"), getTrackbarPos("SMax", "scrollbars"), getTrackbarPos("VMax", "scrollbars"));
+		//auto whiteL = Vec3b(getTrackbarPos("HMin", "scrollbars"), getTrackbarPos("SMin", "scrollbars"), getTrackbarPos("VMin", "scrollbars"));
+		//auto whiteU = Vec3b(getTrackbarPos("HMax", "scrollbars"), getTrackbarPos("SMax", "scrollbars"), getTrackbarPos("VMax", "scrollbars"));
 		mask.setTo((uchar)0);
 		output.setTo(Vec3b{ 127, 127, 127 });
 		drawCubeFrame(output, { 0, 0, 0 });
@@ -294,6 +301,44 @@ int main() {
 		}
 
 		//colors.push_back({{}})
+		{
+			auto color = red[0].first;
+			auto lower = red[0].second.first;
+			auto upper = red[0].second.second;
+			inRange(hsv, lower, upper, aux_mask);
+
+			color = red[1].first;
+			lower = red[1].second.first;
+			upper = red[1].second.second;
+			inRange(hsv, lower, upper, aux_mask2);
+
+			mask = aux_mask | aux_mask2;
+			morphologyEx(mask, mask, MORPH_CLOSE, close_kernel);
+			morphologyEx(mask, mask, MORPH_OPEN, open_kernel, { -1, -1 }, 2);
+
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					auto p = up_left + contour_division * Point(j, i);
+					auto up_left = p + scan_up_left_offset;
+					auto down_right = p + scan_down_right_offset;
+
+					int sum = 0;
+					int cnt = 0;
+					for (int k = up_left.y; k < down_right.y; k++) {
+						for (int l = up_left.x; l < down_right.x; l++) {
+							sum += mask(k, l) == 255;
+							cnt++;
+						}
+					}
+					auto avg = 1.0 * sum / cnt;
+					if (cvRound(avg) < 1) continue;
+					if (avg < squares[i][j]) continue;
+
+					squares[i][j] = avg;
+					fillRectangle(output, up_left, down_right, color);
+				}
+			}
+		}
 		for (auto& p : colors) {
 			auto color = p.first;
 			auto lower = p.second.first;

@@ -1,0 +1,3 @@
+hmin =   3 hmax =   8 avgh = 5.762044
+smin =  99 smax = 132 avgs = 120.772569
+vmin = 255 vmax = 255 avgv = 255.000000
