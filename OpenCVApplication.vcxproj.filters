@@ -8,11 +8,8 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="lab05.cpp" />
-    <ClCompile Include="lab06.cpp" />
     <ClCompile Include="lab07.cpp" />
     <ClCompile Include="lab08.cpp" />
-    <ClCompile Include="lab09.cpp" />
-    <ClCompile Include="lab10.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h" />
@@ -24,10 +21,7 @@
     <ClInclude Include="lab04.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="lab05.h" />
-    <ClInclude Include="lab06.h" />
     <ClInclude Include="lab07.h" />
     <ClInclude Include="lab08.h" />
-    <ClInclude Include="lab09.h" />
-    <ClInclude Include="lab10.h" />
   </ItemGroup>
 </Project>
